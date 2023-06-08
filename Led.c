@@ -1,23 +1,24 @@
 #include "led.h"
 
 
-void Led_ctor(Led_Type * const me, LedColor_Type _color, LedState_Type _state){
+void Led_ctor(Led_Type * const me, LedColor_Type _color, LedState_Type _state){ //Konstruktor för LED
   
-	me->color  = _color;
-	me->state  = _state; 
+	me->color  = _color; //Tilldelar angivna färgen till LED
+	me->state  = _state;  //Tilldelar angivna tillståndet till LED
 
-	RCC->AHB1ENR |= LED_PORT_CLOCK;  
+	//Hårdvaru-initialiseringen
+	RCC->AHB1ENR |= LED_PORT_CLOCK;  //Aktiverar vi klocksignalen för porten vi skall arbeta med (PortB)
 	
 	switch(_color){
 		 
-		case RED:
-			LED_PORT->MODER |=LED_RED_MODE_BIT;
+		case RED: //Kontrollerar värdet av color
+			LED_PORT->MODER |=LED_RED_MODE_BIT; //Ställer in lägesbiten 27 för alternativ RED
 		  if(me->state  == ON){
-			   LED_PORT->ODR |= LED_RED_PIN;
+			   LED_PORT->ODR |= LED_RED_PIN; //Slår på LED 13 om tillståndet är ON
 				printf("The RED Led is set ON \n\r");
 			}
 			else{
-			  LED_PORT->ODR &= ~LED_RED_PIN;
+			  LED_PORT->ODR &= ~LED_RED_PIN; //Slår av LED om tillståndet är OFF
         printf("The RED Led is set OFF \n\r");
 
 			}
@@ -67,7 +68,7 @@ void Led_ctor(Led_Type * const me, LedColor_Type _color, LedState_Type _state){
 
 
 void Led_setState(Led_Type * const me,LedState_Type _state){
-
+//En funktion för att tilldela LED-objektet sitt tillstånd
 	 me->state =  _state;
 
 	 
@@ -75,13 +76,13 @@ void Led_setState(Led_Type * const me,LedState_Type _state){
 	switch(me->color){
 		 
 		case RED:
-			LED_PORT->MODER |=LED_RED_MODE_BIT;
+			LED_PORT->MODER |=LED_RED_MODE_BIT; //Ställer in lägesbiten till rätt alternativ funktion
 		  if(me->state  == ON){
-			   LED_PORT->ODR |= LED_RED_PIN;
+			   LED_PORT->ODR |= LED_RED_PIN; //Slår på röd LED om state är ON
 				printf("The RED Led is set ON \n\r");
 			}
 			else{
-			  LED_PORT->ODR &= ~LED_RED_PIN;
+			  LED_PORT->ODR &= ~LED_RED_PIN; //Slår av röd LED om state är OFF
         printf("The RED Led is set OFF \n\r");
 
 			}
@@ -131,7 +132,7 @@ void Led_setState(Led_Type * const me,LedState_Type _state){
 
 
 LedState_Type Led_getState(Led_Type * const me){
-
+//Funktion för att avläsa nuvarande status av LED-objektet
 	switch(me->color){
 		
 		case RED:
